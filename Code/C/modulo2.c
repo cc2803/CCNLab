@@ -1,3 +1,10 @@
+//Algorithm:
+//1.Given a bit string, append 0S to the end of it (the number of 0s is the same as the degree of the generator polynomial) let B(x) be the polynomial corresponding to B.
+//2.Divide B(x) by some agreed on polynomial G(x) (generator polynomial) and determine the remainder R(x). This division is to be done using Modulo 2 Division.
+//3.Define T(x) = B(x) –R(x) (T(x)/G(x) => remainder 0)
+//4.Transmit T, the bit string corresponding to T(x).
+//5,Let T’ represent the bit stream the receiver gets and T’(x) the associated polynomial. The receiver divides T1 (x) by G(x). If there is a 0 remainder, the receiver concludes T = T’ and no error occurred otherwise, the receiver concludes an error occurred and requires a retransmission.
+
 #include<stdio.h>
 #include<string.h>
 #define N strlen(g)

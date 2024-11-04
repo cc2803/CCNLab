@@ -1,4 +1,11 @@
 //BIT stuffing
+//Algorithm for bit stuffing:
+//1. Input the data bit stream
+//2. Check for 5 consecutive ones
+//3. If present add 0 to the sixth bit
+//4. If not continue to further bit
+//5. Add start and end frame
+//6. Transmit and display
 #include <stdio.h>
 #include <string.h>
 

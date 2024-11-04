@@ -1,3 +1,11 @@
+//Aim: To write and execute program for character stuffing and de-stuffing.
+//Theory: In character stuffing, at the starting an ASCII sequence DLESTX and at the end DLEETX is transmitted for synchronization But when DLE occurs in the data itself then the systems adds one more DLE alone with present one so at the receiver it detects one DLE such that DLE of data will be safe.
+//Example:
+//i)	Original data : MSRITECE
+//Stuffed data: DLESTX MSRITECE DLEETX
+//ii)	Original data DLE MSRITECEDLE
+//Stuffed data: DLESTX DLEDLE MSRITECEDLE DLE DLEETX
+
 #include <stdio.h>
 
 #define DLE 16

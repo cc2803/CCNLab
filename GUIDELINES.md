@@ -35,3 +35,5 @@ Just simply open this repository on a web browser, navigate to required director
    - GitHub will often show a prompt to create a pull request (PR) after you've pushed your changes.
    - Click on **Compare & pull request** to create a new PR.
    - Add a title and description for your changes, and then click **Create pull request**.
+
+  The repository moderators will review your changes and merge if necessary. Kindly ensure you follow appropriate coding practises and avoid redundancy.

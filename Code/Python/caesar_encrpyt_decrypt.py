@@ -10,26 +10,32 @@ def encrypt(data_list):
     newchar=""
     res=""
     for i in data_list:
-        for j in range(l):
-            if alpha_list[j]==i and ord(i)+key<=122:
-                newchar=chr((ord(i)+key)%123)
-                res+=newchar
-            elif alpha_list[j]==i and ord(i)+key>122:
-                newchar=chr((ord(i)+key)%122+96)
-                res+=newchar
+        if i in alpha_list:
+            for j in range(l):
+                if alpha_list[j]==i and ord(i)+key<=122:
+                    newchar=chr((ord(i)+key)%123)
+                    res+=newchar
+                elif alpha_list[j]==i and ord(i)+key>122:
+                    newchar=chr((ord(i)+key)%122+96)
+                    res+=newchar
+        else:
+            res+=i
     return res
     
 def decrypt(encrypted_text,key):
     newchar=""
     res=""
     for i in encrypted_text:
-        for j in range(l):
-            if alpha_list[j]==i and ord(i)-key>=97:
-                newchar=chr((ord(i)-key))
-                res+=newchar
-            elif alpha_list[j]==i and ord(i)-key<97:
-                newchar=chr((ord(i)-key)+26)
-                res+=newchar
+        if i in alpha_list:
+            for j in range(l):
+                if alpha_list[j]==i and ord(i)-key>=97:
+                    newchar=chr((ord(i)-key))
+                    res+=newchar
+                elif alpha_list[j]==i and ord(i)-key<97:
+                    newchar=chr((ord(i)-key)+26)
+                    res+=newchar
+        else:
+            res+=i
     return res
     
 enc_res = encrypt(data_list)    
@@ -41,10 +47,10 @@ while True:
     n = int(input("Enter the key index for decryption: \t"))
     if n!=key:
         print("Try again, wrong guess!")
-
-# NOTE: This code ignores special charcters(whitespaces included) and numbers. Improvements coming up soon
     else:
         dec_res = decrypt(enc_res,n)        
 
         print("decrypted text is: \t",dec_res)
         break
+
+#Note: fix for previously ignoring special characters added, possible issues- Upper/Lowercase conversions

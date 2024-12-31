@@ -7,61 +7,48 @@
 //Stuffed data: DLESTX DLEDLE MSRITECEDLE DLE DLEETX
 
 #include <stdio.h>
+#include <string.h>
 
-#define DLE 16
-#define STX 2
-#define ETX 3
+void byteStuffing(char *input, char *output) {
+    int j = 0;
+    const char *start = "DLE STX ";
+    const char *end = " DLE ETX";
+
+    // Add start delimiter
+    strcpy(output, start);
+    j = strlen(output);
+
+    // Process input
+    for (int i = 0; input[i] != '\0'; i++) {
+        if (strncmp(&input[i], "DLE", 3) == 0) {
+            // Escape DLE
+            strcpy(&output[j], "DLE DLE ");
+            j += 8;
+            i += 2;  // Skip the "DLE" characters in the input
+        } else if (strncmp(&input[i], "ETX", 3) == 0) {
+            // Escape ETX
+            strcpy(&output[j], "DLE ETX ");
+            j += 8;
+            i += 2;  // Skip the "ETX" characters in the input
+        } else {
+            // Copy normal characters
+            output[j++] = input[i];
+        }
+    }
+
+    // Add end delimiter
+    strcpy(&output[j], end);
+}
 
 int main() {
-    char ch, arr[50] = {DLE, STX}, rec[50];
-    int len = 2, i, j;
+    char input[100], output[200];
 
-    printf("Enter the data stream: ctrl+p->DLE ctrl+b->STX ctrl+c->ETX\n");
-    while ((ch = getchar()) != '\n') {
-        if (ch == DLE) {
-            arr[len++] = DLE;
-            printf("DLE");
-        } else if (ch == STX) {
-            printf("STX");
-        } else if (ch == ETX) {
-            printf("ETX");
-        } else {
-            printf("%c", ch);
-        }
-        arr[len++] = ch;
-    }
-    arr[len++] = DLE;
-    arr[len++] = ETX;
+    printf("Enter the data:\n");
+    scanf("%[^\n]", input);
 
-    printf("\nThe stuffed stream is:\n");
-    for (i = 0; i < len; i++) {
-        ch = arr[i];
-        if (ch == DLE) {
-            printf("DLE");
-        } else if (ch == STX) {
-            printf("STX");
-        } else if (ch == ETX) {
-            printf("ETX");
-        } else {
-            printf("%c", ch);
-        }
-    }
+    byteStuffing(input, output);
 
-    // Destuffing
-    printf("\nThe destuffed data stream is:\n");
-    for (j = 2; j < len - 2; j++) {
-        ch = arr[j];
-        if (ch == DLE) {
-            printf("DLE");
-            j++;
-        } else if (ch == STX) {
-            printf("STX");
-        } else if (ch == ETX) {
-            printf("ETX");
-        } else {
-            printf("%c", ch);
-        }
-    }
+    printf("\nByte stuffed stream is:\n%s\n", output);
 
     return 0;
 }

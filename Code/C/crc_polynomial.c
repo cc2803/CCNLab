@@ -7,46 +7,74 @@
 
 #include<stdio.h>
 #include<string.h>
-#define N strlen(g)
-char t[128], cs[128], g[]="10110";
-int a, e, c;
-void xor() {
- for(c=1;c<N;c++) cs[c]=((cs[c]==g[c])?'0':'1');
-} 
 
-void crc() {
- for(e=0;e<N;e++) cs[e]=t[e];
- do {
- if(cs[0]=='1') xor();
- for(c=0;c<N-1;c++) cs[c]=cs[c+1];
- cs[c]=t[e++];
- }while(e<=a+N-1);
-}
-void main() {
- //clrscr();
- printf("\nEnter poly : "); scanf("%s",t);
- printf("\nGenerating Polynomial is : %s",g);
- a=strlen(t);
- for(e=a;e<a+N-1;e++) t[e]='0'; // N length of generating polynomial
- printf("\nModified t[u] is : %s",t);
- crc();
- printf("\nChecksum is : %s",cs);
+#define POLY_LENGTH strlen(generator)
 
-//RX
- for(e=a;e<a+N-1;e++) t[e]=cs[e-a];
- printf("\nFinal Codeword is : %s",t);
- int check,gg;
- printf("\nTest Error detection 0(yes) 1(no) ? ");
- scanf("%d",&check);
- if(check==0){
-	 printf("\nEnter position where you want to insert error : ");
-	 scanf("%d",&gg);
-	 t[gg]=(t[gg]=='1'?'0':'1');
-	 printf("\nErrorneous data : %s",t);
-	 printf("\nError Detected");
- }
- else{
-	 printf("\nno Error Detected");
- }
- 
+char inputData[128], checksum[128], generator[] = "10110";
+int dataLength, index, shift;
+
+void xorOperation() {
+    for (shift = 1; shift < POLY_LENGTH; shift++) {
+        checksum[shift] = (checksum[shift] == generator[shift]) ? '0' : '1';
+    }
 }
+
+void calculateChecksum() {
+    for (index = 0; index < POLY_LENGTH; index++) {
+        checksum[index] = inputData[index];
+    }
+    do {
+        if (checksum[0] == '1') {
+            xorOperation();
+        }
+        for (shift = 0; shift < POLY_LENGTH - 1; shift++) {
+            checksum[shift] = checksum[shift + 1];
+        }
+        checksum[shift] = inputData[index++];
+    } while (index <= dataLength + POLY_LENGTH - 1);
+}
+
+int main() {
+    printf("\nEnter data: ");
+    scanf("%s", inputData);
+    
+    printf("\nGenerating Polynomial is: %s", generator);
+    
+    dataLength = strlen(inputData);
+    for (index = dataLength; index < dataLength + POLY_LENGTH - 1; index++) {
+        inputData[index] = '0';
+    }
+    
+    printf("\nModified data is: %s", inputData);
+    
+    calculateChecksum();
+    
+    printf("\nChecksum is: %s", checksum);
+    
+    // Prepare for receiver side
+    for (index = dataLength; index < dataLength + POLY_LENGTH - 1; index++) {
+        inputData[index] = checksum[index - dataLength];
+    }
+    
+    printf("\nFinal codeword is: %s", inputData);
+    
+    int testError, errorPos;
+    printf("\nTest error detection (0 = Yes, 1 = No)? ");
+    scanf("%d", &testError);
+    
+    if (testError == 0) {
+        printf("\nEnter position to insert error: ");
+        scanf("%d", &errorPos);
+        
+        // Flip the bit at the error position
+        inputData[errorPos] = (inputData[errorPos] == '1') ? '0' : '1';
+        
+        printf("\nErroneous data: %s", inputData);
+        printf("\nError detected");
+    } else {
+        printf("\nNo error detected");
+    }
+    
+    return 0;
+}
+
